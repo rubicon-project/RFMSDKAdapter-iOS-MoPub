@@ -1,9 +1,6 @@
 //
 //  RFMMoPubBannerAdapter.m
 //
-//  Integrated with RFM iOS SDK v 4.2.0
-//  Integrated with MoPub iOS SDK : 3.4.0
-//
 //  Created by The Rubicon Project on 2/15/15.
 //  Copyright (c) Rubicon Project. All rights reserved.
 
@@ -26,7 +23,7 @@
 {
   
     //Custom Event Dictionary Format:
-    //{“rfm_app_id”:[Pass RFM App ID here],”rfm_pub_id”:[Pass RFM Pub ID Here],”rfm_server_name”:[RFM Server Name Here, must end in / ]}
+    //{"rfm_app_id":[Pass RFM App ID here],"rfm_pub_id":[Pass RFM Pub ID Here],"rfm_server_name":[RFM Server Name Here, must end in / ]}
   if (!info ||
       !info[RFM_MOPUB_SERVER_KEY] ||
       !info[RFM_MOPUB_APP_ID_KEY] ||
@@ -83,6 +80,12 @@
     adRequest.locationLatitude = location.coordinate.latitude;
     adRequest.locationLongitude = location.coordinate.longitude;
   }
+  
+  // check for VAST request in info dictionary
+  NSString *fetchOnlyVideoAdsString = info[RFM_MOPUB_FETCH_ONLY_VIDEO_ADS_KEY];
+  BOOL fetchOnlyVideoAds = fetchOnlyVideoAdsString && [fetchOnlyVideoAdsString.uppercaseString isEqualToString:@"YES"] ?
+    YES : NO;
+  adRequest.fetchOnlyVideoAds = fetchOnlyVideoAds;
 
   //
   //
@@ -103,7 +106,6 @@
   
   /*----END OPTIONAL RFM TARGETING INFO -------*/
   
-
   
   
   if(![_rfmAdView requestFreshAdWithRequestParams:adRequest]){
